@@ -1,0 +1,26 @@
+ <div class="modal-body">
+    <div class="container-fluid">
+        <div class="form-group">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Payment No.</th>
+                <th>Amount</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% if @payment_info %>
+                <% @payment_info.each  do  |payment| %>
+                    <tr>
+                        <td><%= payment[:payment_no] %></td>
+                        <td><%= payment[:amount] %></td>
+                        <td><%= payment[:created_at] %></td>
+                    </tr>
+                <% end %>
+            <% end %>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>

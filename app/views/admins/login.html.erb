@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" style="border: 0px;">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">INVENTORY</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right"></ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <%= form_for(:admin,:url=>{:action => 'login_check'})  do |i|%>
+        <div class="info text-center">
+            <h1 class="text-center" style="color: #000;margin-top: 90px;">Inventory Login</h1>
+        </div>
+        <br>
+        <br>
+        <div class="row" id="form1">
+            <div class="col-md-4"></div>
+            <div class="col-xs-12 col-md-4 text-left" id="form" style="border: 1px solid black;">
+                <div class="form-group">
+                    <h4 style="text-align: left;">Email ID :</h4>
+                	<input required autocomplete="off" type="text" class="form-control" id="user_email" placeholder="Email Id" name="admin[email]">
+                </div>
+                <div class="form-group">
+                    <h4 style="text-align: left;">Password :</h4>
+					<input required autocomplete="off" type="password" class="form-control" id="user_password" placeholder="Password" name="admin[pasword]"></div>
+                    
+                <br>
+                <center>
+                <button type="submit" class="btn btn-default text-center" name="commit" value="Login">Login	
+                </button>
+                </center> 
+                
+                <br>
+                <br>
+            </div>
+        </div>
+    <% end %>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" style="border: 0px;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">INVENTORY</a>
+        </div>
+    </div>
+</nav>
+
+            <%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) 
+                                %> 
+<div class="container-fluid">
+    <!--form role="form"-->
+        <div class="info text-center">
+            <h1 class="text-center" style="color: #000;margin-top: 90px;">Purchase list </h1>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="form-group">
+                        <form id="form-1" method='post'  action=''>
+                            <br><br> 
+                            <input  required autocomplete="off" class="form-control" name='from_date' id='from_date' placeholder="from Date"  type="date"/>
+                            <h4 style="text-align: left;"> To </h4>
+                            <input  required autocomplete="off" class="form-control" name='to_date' id='to_date' placeholder="To Date" type="date" />
+                            <div align="center" style="margin-top:20px; ">
+                            <button type="Submit" id="date_submit" class="btn btn-default text-center">Submit</button>
+                            </div>
+                        </form>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-8 text-left">
+                <div align="center">
+                    <select class="form-control" name='sort_by' id='sort_by' style="width : 25%">        
+                        <option selected disabled>sort by</option>
+                        <option value="1">low to high total</option>
+                        <option value="2">high to low total</option>
+                        <option value="3">newest first</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <table class="table table-hover" id="table_body">
+                        <thead>
+                        <tr>
+                            <th>Purchase ID</th>
+                            <th>Company Name</th>
+                            <th>place</th>
+                            <th>Total</th>
+                            <th>Purchase Date</th>                            
+                            <th>Payment Done</th>
+                            <th>details</th>
+                            <th>Payment Details</th>
+                            <th>Add Payment </th>                                
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% @purchases.each  do  |purchase| %>
+                        <tr class="table_row">
+                            <td><%= purchase[:bill_no] %></td>
+							<td><%= purchase[:company_name] %></td>
+                            <td><%= purchase[:place] %></td>
+							<td><%= purchase[:cost] %></td>
+							<td><%= purchase[:created_at] %></td>
+                            <td><%=purchase[:total_payment_done]%></td>    
+                            <td>
+                            <a id="purchase_detail_<%= purchase[:bill_no] %>" data-toggle="modal"  data-target="#myModal" data-id="<%= purchase[:bill_no] %>"> 
+                            details
+                            </a>
+                            </td>
+                            <td>
+                            <a id="payment_detail_<%=purchase[:bill_no] %>" data-toggle="modal"  data-target="#myModal2" data-id="<%= purchase[:bill_no] %>"> 
+                            Payment details
+                            </a>
+                            </td>
+                            <td>
+                            <% if (purchase[:total_payment_done]-purchase[:cost] != 0)    %>        
+                            <a id="add_payment_<%=purchase[:bill_no] %>" data-toggle="modal"  data-target="#myModal3" data-id="<%= purchase[:bill_no] %>"> 
+                                add Payment 
+                            </a>
+                            <% else %> 
+                            <%= "payment done" %>
+                            <% end %>    
+                            </td>
+                        <% end %>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+     <%= paginate @purchases %>
+                <br>
+                <br>
+            </div>
+        </div>
+ </div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <center>
+                <h4 class="modal-title" id="myModalLabel">Sales Info</h4>
+                </center>
+            </div>
+            <div id="purchase_details_result">
+
+            </div>
+           
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <center>
+                <h4 class="modal-title" id="myModalLabel">Payment Info</h4>
+                </center>
+            </div>
+            <div id="payment_details_result">
+
+            </div>
+           
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <center>
+                <h4 class="modal-title" id="myModalLabel"> Add Payment</h4>
+                </center>
+            </div>
+            <form id="form-2" method='post' action='#'>
+                    <div class="form-group" style="width:75% ;margin:auto; ">
+                        <br>
+                        <h4 style="text-align: left;">Payment Amount :</h4>
+                        <input type="number" class="form-control" id="payment_amount" name="payment_amount" placeholder="Payment Amount to be added">
+                    </div>
+                    <br>
+                    <center>
+                        <button type="submit" class="btn btn-default" id="payment_submit">
+                        Submit
+                        </button>
+                    </center>
+                    <br>
+                    <br>
+            </form>
+
+
+        </div>
+    </div>
+</div> 
+
+
+<script type="text/javascript">
+    
+    function Globals(){
+        var self = this; 
+        self.get_purchase_info=function(){
+            var id;
+            <% @purchases.each  do  |purchase| %>
+            $(document).on('click',"#purchase_detail_<%= purchase[:bill_no] %>",function(){
+                console.log("purchase details pressed");
+                id=$("#purchase_detail_<%= purchase[:bill_no] %>").attr('data-id');
+                   console.log(id);
+                   ajax_request(id);
+            });
+            <% end %>
+
+            function ajax_request(id){
+            var post_data={
+                utf8: $("[name='utf8']").val(), 
+                authenticity_token: $("[name='authenticity_token']").val(),
+                purchase_id: id,}
+
+                $.ajax({
+                url: 'getpurchaseinfo',
+                type: 'POST',
+                data: post_data ,
+                dataType: 'text',
+                success: function(data)
+                    {
+                        $('#purchase_details_result').html(data);
+                    }
+                })
+                .fail(function(data){
+                    console.log(data);
+                    });     
+            }
+        }
+
+        self.get_payment_info=function(){
+            var id;
+            <% @purchases.each  do  |purchase| %>
+            $(document).on('click','#payment_detail_<%= purchase[:bill_no] %>',function(){
+                console.log("payment details pressed");
+                id=$("#payment_detail_<%= purchase[:bill_no] %>").attr('data-id');
+                   console.log(id);
+                   payment_ajax_request(id);
+            });
+            <% end %>
+
+            function payment_ajax_request(id){
+            var post_data={
+                utf8: $("[name='utf8']").val(), 
+                authenticity_token: $("[name='authenticity_token']").val(),
+                purchase_id: id,}
+
+                $.ajax({
+                url: 'getpaymentinfo',
+                type: 'POST',
+                data: post_data ,
+                dataType: 'text',
+                success: function(data)
+                    {
+                        $('#payment_details_result').html(data);
+                    }
+                })
+                .fail(function(data){
+                    console.log(data);
+                    });     
+            }
+        }
+
+        self.add_payment=function(){
+            <% @purchases.each  do  |purchase| %>
+            $(document).on('click',"#add_payment_<%= purchase[:bill_no] %>",function(){
+                console.log("add payment pressed");
+                id=$("#add_payment_<%= purchase[:bill_no] %>").attr('data-id');
+                   console.log(id);
+                  add_payment_ajax_request(id);
+            });
+            <% end %>                
+            function add_payment_ajax_request(id)
+            {
+                $("#form-2").submit(function(e){
+                    console.log("payment pressed");
+                    e.preventDefault();
+                    var post_data={
+                        utf8: $("[name='utf8']").val(), 
+                        authenticity_token: $("[name='authenticity_token']").val(),
+                        purchase_id: id,
+                        payment_amount: $("#payment_amount").val(), 
+                        };
+                    console.log(post_data);
+
+                    $.ajax({
+                        url: 'addpayment',
+                        type: 'POST',
+                        data: post_data ,
+                        dataType: 'text',
+                        success: function(data)
+                        {
+                             location.reload();
+                            // console.log("success");
+                        }
+                })
+                .fail(function(data){
+                    console.log(data);
+                    });         
+
+                });       
+            }
+        }
+
+        self.filter_by_date=function(){
+            $(document).on('change',"#from_date",function(){
+                var a=$("#from_date").val();
+                $("#to_date").attr("min",a);
+            });
+
+            $(document).on('change',"#to_date",function(){
+                var a=$("#to_date").val();
+                $("#from_date").attr("max",a);
+            });
+
+            $(document).on('submit',"#form-1",function(e){
+                console.log("form submitted");
+                e.preventDefault();
+                date_filter_ajax_request();
+            });
+
+            function date_filter_ajax_request(){
+
+                var a=$("#to_date").val();
+
+                var b=$("#from_date").val();
+
+                var post_data = {
+                    utf8: $("[name='utf8']").val(), 
+                    authenticity_token: $("[name='authenticity_token']").val(),
+                    to_date : a,
+                    from_date: b,
+                    filter_type: "date",
+                    sort_type : $("#sort_by").val(),      
+                    };
+                    $.ajax({
+                        url: 'sort',
+                        type: 'POST',
+                        data: post_data ,
+                        dataType: 'text',
+                        success: function(data)
+                            {
+                                // console.log("success");
+                                // console.log(data);
+                                 $('#table_body').html(data);
+                                                         
+                            }
+                        }).fail(function(data){
+                        console.log(data);
+                        });
+            }
+        }
+
+        self.sort_by = function(){
+                 $(document).on('click',"#sort_by",function() {
+                        ajax_sorting_request(); 
+                    });
+                    function ajax_sorting_request()
+                    {
+                        console.log("in ajax sorting request");
+
+                        var post_data = {
+                        utf8: $("[name='utf8']").val(), 
+                        authenticity_token: $("[name='authenticity_token']").val(),
+                        sort_type : $("#sort_by").val(),
+                        to_date: $("#to_date").val(),
+                        from_date: $("#from_date").val(),      
+                        };
+                        $.ajax({
+                            url: 'sort',
+                            type: 'POST',
+                            data: post_data ,
+                            dataType: 'text',
+                            success: function(data)
+                                {
+                                    $("#table_body").html(data);
+                                }
+                            }).fail(function(data){
+                            console.log(data);
+                            });
+                    }
+
+                }
+    
+    }
+
+    var globals = new Globals();
+    globals.get_purchase_info();
+    globals.get_payment_info();
+    globals.add_payment();
+    globals.filter_by_date();
+    globals.sort_by();
+</script>
+
+
+
+</body>
+</html> 

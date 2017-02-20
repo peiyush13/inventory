@@ -1,0 +1,19 @@
+
+<% if @items
+@items.each  do  |item| %>
+<div id='search_result_<%=item.item_id%>' value='' data-id="<%=item.item_id%>" data-name="<%=item.item_name%>" data-stock="<%=item.stock%>" data-Price="<%=item.MRP%>">
+<%= item.item_name %>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+	$('#search_result_<%=item.item_id%>').click(function(){
+				console.log('clicked'+$("#search_result_<%=item.item_id%>").text());
+				globals.ajax_request(<%=item.item_id%>);
+			});			
+	});
+
+</script>
+ 
+<% end %>
+<% end %>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" style="border: 0px;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">INVENTORY</a>
+        </div>
+    </div>
+</nav>
+
+
+
+
+
+
+<div class="container-fluid">
+    <!--form role="form"-->
+        <div class="info text-center">
+            <h1 class="text-center" style="color: #000;margin-top: 90px;">Expense Sheet </h1>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-2">
+                <br><br> 
+                <div class="form-group">
+                        <form id="form-1" method='post'  action='' data-id="search">
+                            <br><br> 
+                            <input  required autocomplete="off" class="form-control" name='from_date' id='from_date' placeholder="from Date"  type="date"/>
+                            <h4 style="text-align: left;"> To </h4>
+                            <input  required autocomplete="off" class="form-control" name='to_date' id='to_date' placeholder="To Date" type="date" />
+                            <div align="center" style="margin-top:20px; ">
+                            <button type="Submit" id="date_submit" class="btn btn-default text-center">Submit</button>
+                            </div>
+                        </form>    
+                </div>       
+            </div>
+            <div class="col-xs-12 col-md-8 text-left">
+                <div align="center">
+                
+                    <select class="form-control" name='sort_by' id='sort_by' style="width : 25%">        
+                        <option selected disabled>sort by</option>
+                        <option value="1">low to high amount</option>
+                        <option value="2">high to low amount</option>
+                        <option value="3">newest first</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) 
+                            %> 
+                    
+                    <table class="table table-hover" id="table_body">
+                        <thead>
+                        <tr>
+                            <th>Expense ID</th>
+                            <th>Expense Type</th>
+                            <th>Description</th>
+                            <th>Cost</th>
+                            <th>Date</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <% @expenses.each  do  |expense| %>
+                        <tr>
+                            <td><%= expense.e_id %></td>
+							<td><%= expense.title %></td>
+							<td><%= expense.description %></td>
+							<td><%= expense.cost %></td>
+                            <td><%= expense.dated %></td>
+                            <td><%= link_to('Edit',:action =>'update',:e_id=>expense.e_id) %>
+                            </td>
+							<td><%= link_to('delete',:action =>'delete',:e_id=> expense.e_id) %>
+							</td>
+                        </tr>
+                        <% end %>
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <br>
+            </div>
+             
+        </div>
+        <%= paginate  @expenses %>
+    <!--/form-->
+</div>
+
+
+<script type="text/javascript">
+    
+
+function Globals () {
+
+        self.sort_by = function(){
+                 $("#sort_by").click(function() {
+                        ajax_sorting_request(); 
+                    });
+                    function ajax_sorting_request()
+                    {
+                        console.log("in ajax sorting request");
+
+                        var post_data = {
+                        utf8: $("[name='utf8']").val(), 
+                        authenticity_token: $("[name='authenticity_token']").val(),
+                        sort_type : $("#sort_by").val(),      
+                        to_date : $("#to_date").val(),
+                        from_date: $("#from_date").val(), 
+                        };
+                        $.ajax({
+                            url: 'sort',
+                            type: 'POST',
+                            data: post_data ,
+                            dataType: 'text',
+                            success: function(data)
+                                {
+                                    $("#table_body").html(data);
+                                }
+                            }).fail(function(data){
+                            console.log(data);
+                            });
+                    }
+                }
+
+        self.filter_by_date=function(){
+            $("#from_date").change(function(){
+                var a=$("#from_date").val();
+                $("#to_date").attr("min",a);
+            });
+
+            $("#to_date").change(function(){
+                var a=$("#to_date").val();
+                $("#from_date").attr("max",a);
+            });
+
+            $("#form-1").submit(function(e){
+                e.preventDefault();
+                date_filter_ajax_request();
+            });
+
+            function date_filter_ajax_request(){
+
+                var post_data = {
+                    utf8: $("[name='utf8']").val(), 
+                    authenticity_token: $("[name='authenticity_token']").val(),
+                    to_date : $("#to_date").val(),
+                    from_date: $("#from_date").val(),
+                    filter_type: "date", 
+                    sort_type : $("#sort_by").val(),            
+                    };
+                    $.ajax({
+                        url: 'sort',
+                        type: 'POST',
+                        data: post_data ,
+                        dataType: 'text',
+                        success: function(data)
+                            {
+                                console.log("success");
+                                $("#table_body").html(data);
+                            }
+                        }).fail(function(data){
+                        console.log(data);
+                        });
+            }
+        }    
+
+        
+    return self;    
+}
+
+var globals = new Globals();
+$(document).ready(function(){
+        console.log("Document ready");
+        globals.price_slider();
+})
+
+globals.sort_by();
+globals.filter_by_date();
+</script>
+
+
+</body>
+</html>

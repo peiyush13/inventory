@@ -1,0 +1,31 @@
+<table class="table table-hover" id="table_body">
+    <thead>
+    <tr>
+        <th>Item ID</th>
+        <th>Item Name</th>
+        <th>Price</th>
+        <th>MRP</th>
+        <th>Stock</th>
+        <th>Expiry date</th>
+        <th>Add</th>
+        <th>Remove</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @items.each  do  |item| %>
+    <tr>
+        <td><%= item.item_id %></td>
+    	<td><%= item.item_name %></td>
+    	<td><%= item.price %></td>
+    	<td><%= item.MRP %></td>
+        <td><%= item.stock %></td>
+        <td><%= item.expiry_date %></td>
+        <td><%= link_to('add',:action =>'update',:item_id=>item.item_id) %>
+        </td>
+    	<td><%= link_to('remove',:action =>'delete',:item_id=> item.item_id) %>
+    	</td>
+    </tr>
+    <% end %>
+    </tbody>
+</table>

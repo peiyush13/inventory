@@ -1,0 +1,46 @@
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>Purchase ID</th>
+        <th>Company Name</th>
+        <th>place</th>
+        <th>Total</th>
+        <th>Purchase Date</th>                            
+        <th>Payment Done</th>
+        <th>details</th>
+        <th>Payment Details</th>
+        <th>Add Payment </th>                                
+    </tr>
+    </thead>
+    <tbody>
+    <% @purchases.each  do  |purchase| %>
+    <tr>
+        <td><%= purchase[:bill_no] %></td>
+    	<td><%= purchase[:company_name] %></td>
+        <td><%= purchase[:place] %></td>
+    	<td><%= purchase[:cost] %></td>
+    	<td><%= purchase[:created_at] %></td>
+        <td><%=purchase[:total_payment_done]%></td>    
+        <td>
+        <a id="purchase_detail_<%= purchase[:bill_no] %>" data-toggle="modal"  data-target="#myModal" data-id="<%= purchase[:bill_no] %>"> 
+        details
+        </a>
+        </td>
+        <td>
+        <a id="payment_detail_<%=purchase[:bill_no] %>" data-toggle="modal"  data-target="#myModal2" data-id="<%= purchase[:bill_no] %>"> 
+        Payment details
+        </a>
+        </td>
+        <td>
+        <% if (purchase[:total_payment_done]-purchase[:cost] != 0)    %>        
+        <a id="add_payment_<%=purchase[:bill_no] %>" data-toggle="modal"  data-target="#myModal3" data-id="<%= purchase[:bill_no] %>"> 
+            add Payment 
+        </a>
+        <% else %> 
+        <%= "payment done" %>
+        <% end %>    
+        </td>
+    <% end %>
+    </tr>
+    </tbody>
+</table>

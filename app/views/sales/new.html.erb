@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Sales</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" style="border: 0px;">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">INVENTORY</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+        <div class="info text-center">
+            <h1 class="text-center" style="color: #000;margin-top: 90px;"> Sale </h1>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-xs-12 col-md-8 text-left" id="form" style="border: 1px solid black;">
+                <div class="row">
+                    <div class="col-xs-12 col-md-5 text-left" >
+                    	<div class="form-group">
+                	    	<form id="form-1" method='post'  action='' data-id="search">
+								<%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) 
+								%> 
+                    			<input required type="hidden"  name='item_id' />
+                        		<h4 style="text-align: left;">Item Name :</h4>
+								<input  required autocomplete="off" class="form-control" name='ItemName' id='item_name' placeholder="Item Name" />
+								<p id="search_result"></p>
+                    	</div>
+                    </div>   	
+                    <div class="col-xs-12 col-md-5 text-left" >
+                    	<div class="form-group">
+                        	<h4 style="text-align: left;">Quantity :</h4>
+                        	<input required autocomplete="off" name=quantity id='quantity' placeholder="0" class="form-control" type="number" />
+                     	</div>
+                    </div>
+                    <div class="col-xs-12 col-md-2 text-left" style="margin-top: 35px;">
+                        <button type="Submit" id="new_submit" class="btn btn-default text-center" >Submit</button>
+                    </div>
+    				</form>                    
+                </div>
+                <br>
+            </div>
+        </div>
+</div>
+
+
+<div class="container-fluid">
+    <form role="form">
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-4"></div>
+
+            <div class="col-xs-12 col-md-4 text-left" >
+                <div class="info text-center">
+                    <h3 class="text-center" style="color: #000;margin-top: 20px;">Shopping Cart </h3>
+                </div>
+                <div class="form-group" style="border: 1px solid black;border-radius: 5px;padding: 20px;">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Quantity</th>
+                            <th></th>
+                            
+                        </tr>
+                        </thead>
+                        <tbody id="cart_list">
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <br>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-xs-12 col-md-4 text-left">
+            <div class="form-group">
+                <h4 id="checkout" style="text-align: center;"></h4>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-4 text-left">
+            <br><br><br><br>
+            <a data-toggle="modal"  data-target="#myModal"> 
+            <button type="Submit" id='checkout_submit' class="btn btn-default text-center" style="padding:20px 60px 20px 60px;margin-left: 100px;">Checkout</button> </a>
+            <br><br>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <center>
+                <h4 class="modal-title" id="myModalLabel">Customer Info</h4>
+            	</center>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                        <div class="info text-center">
+                            <h1 class="text-center" style="color: #000;margin-top: 90px;">Customer Info</h1>
+                        </div>
+                        <br>
+                       	<div class="row text-center" style="margin-left: 25%;">
+                        	<form id="form-2" method='post' action='#'>
+                        	<%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %>
+	                            <div class="col-xs-12 col-md-8 text-left" style="border: 1px solid black;margin:auto;">
+	                                <div class="form-group">
+	                                    <br>
+	                                    <h4 style="text-align: left;">Customer Name :</h4>
+	                                    <input type="hidden" type="text" name="cust_id" >
+	                                    <input type="text" class="form-control" id="cust_name" name="cust_name" placeholder="Customer Name">
+	                                    <p id="customer_name_search_result"></p>
+	                                </div>
+	                                <div class="form-group">
+	                                    <h4 style="text-align: left;">Mobile No. :</h4>
+	                                    <input type="number" class="form-control" id="cust_mobileno" name="cust_mobileno" placeholder="Mobile No." >
+	                                </div>
+	                                <div class="form-group">
+	                                    <h4 style="text-align: left;">Address :</h4>
+	                                    <input type="text" class="form-control" id="cust_address" name="cust_address" placeholder="Address"></div>
+	                                <br>
+	                                <center>
+	                                	<button type="submit" class="btn btn-default" id="final_submit">
+	                                	Submit
+	                                	</button>
+	                                </center>
+	                                <br>
+	                                <br>
+	                            </div>
+	                        </form>
+                        </div>
+                </div>
+            </div>
+ 
+        </div>
+    </div>
+</div>
+
+
+
+
+</body>
+</html>
+
+
+<script type="text/javascript">
+
+function Globals () {
+
+	var self = this; 
+		self.cart = JSON.parse(window.localStorage.getItem("cart"));
+		if(!self.cart)
+			self.cart=[];
+	var val;
+	var count;
+	self.checkout_total =JSON.parse(window.localStorage.getItem("checkout_total"));
+	if(!self.checkout_total){
+		self.checkout_total=new Array();
+		count=0;
+	}else
+		count=self.checkout_total.length;
+
+	
+
+	self.print_cart_list = function () {
+		var cart = JSON.parse(window.localStorage.getItem("cart"));
+		if (cart){
+		$("#cart_list").html("");
+		for(i = 0; i < cart.length;i++) {
+
+			$("#cart_list").append("<tr><td>" 
+								+ cart[i].name 
+								+ "</td><td>" 
+								+ cart[i].quantity 
+								+ "</td><td>" 
+								+"<a href='' class='item_delete' id='"+i+"' data-id="+cart[i].item_id+ ">delete</a></td></tr>");
+			}
+
+			$('#checkout').html("");
+	
+			var total_list=JSON.parse(window.localStorage.getItem("checkout_total"));
+			var total=0;
+			for(i=0;i<total_list.length;i++)
+			{
+				total+=total_list[i];
+			}
+
+			if(total_list[self.cart.length-1]!=undefined){
+			$('#checkout').append("Checkout Total :"+total);
+			}
+		}		
+	}
+
+	self.ajax_request = function (id) {
+		console.log("in function ajax_request");
+		var name = $('#search_result_' + id).attr("data-name");
+	  	$("#item_name").val(name);
+	 	$("[name='item_id']").val(id);	  	 	
+	}
+
+	self.cust_ajax_request = function (id) {
+		console.log("in function cust ajax_request");
+		var name = $('#cust_search_result_'+id).attr("data-name");
+	  	var address = $('#cust_search_result_'+id).attr("data-address");
+	  	var mobileno = $('#cust_search_result_'+id).attr("data-mobileno");
+	  	
+	  	// console.log(name+" "+address+" "+mobileno);
+
+	  	$("#cust_name").val(name);
+	  	$("#cust_address").val(address);
+	  	$("#cust_mobileno").val(mobileno);
+
+	 	$("[name='cust_id']").val(id);
+	 	$('#cust_search_result_'+id);	  	 	
+	}
+	self.debug = true;
+	
+	self.search = function () {
+		$("[name= 'ItemName']").keyup(function(){
+		console.log("Keyup");
+		$.ajax({
+			url: 'search',
+			type: 'POST',
+			data: $(this).parent().serialize() 	,
+			dataType: 'text',
+			success: function(data)
+			{
+				$('#search_result').html(data);
+		   	}
+			
+		})
+		.fail(function(data){
+			console.log(data);
+			});
+		});
+	}
+
+ 	self.delete_cart_item = function(){
+ 		$('.item_delete').click(function(e){
+ 			e.preventDefault();
+ 			var id=$(this).attr('id');
+ 			console.log("cart item delete");
+			
+			var i;
+			var cart_data=[];
+			var count1=0;
+			var checkout_total1=new Array();			
+			var deleted_index;
+		 	for(i = 0; i < self.cart.length;i++){
+
+		 		if(self.cart[i].item_id ==$('#'+id).attr('data-id'))
+ 				{
+ 					deleted_index=i;
+ 					console.log('deleted');
+ 					continue;
+ 				}
+ 				cart_data.push(self.cart[i]);
+ 				count1++;
+			}
+
+			for(i=0;i<self.checkout_total.length;i++)
+			{
+				if(i!=deleted_index)
+				{
+					var temp=self.checkout_total.pop();
+					checkout_total1.push(temp);
+				}
+			}
+			
+			window.localStorage.setItem('cart', JSON.stringify(cart_data));
+
+			window.localStorage.setItem('checkout_total',JSON.stringify(checkout_total1)); 
+		 	location.reload();
+ 	});
+
+ }
+
+	self.form_submission = function () {
+		$('#form-1').submit(function(e){
+			e.preventDefault();
+		    var stock = parseInt($("[name='quantity']").val());
+		    var name = $("[name='ItemName']").val();
+		    var item_id = $("[name='item_id']").val();
+			var stock_present = $('#search_result_'+ item_id).attr("data-stock");
+		   	var price = parseInt($('#search_result_'+ item_id).attr("data-price"));
+		   	if(parseInt(stock_present) < stock ){
+			  	swal("quantity not available"," ","error");
+			  	$("[class='confirm']").click(function(){
+			  		location.reload();
+			  	});
+		   	}
+			else{
+				var total= price * stock;     	
+				var flag=0;
+				var i;  		
+				for(i=0;i<self.cart.length;i++)
+				{
+					if(self.cart[i].item_id==item_id)
+					{
+						self.cart[i].quantity+=stock;
+						self.checkout_total[i]+=total;
+						flag=1;	
+					}
+				} 
+				if (flag==0)
+				{ 		
+					item = {
+					  			quantity: stock,
+					  			item_id:  item_id,
+					  			name: name, 
+					  		}
+
+					self.cart.push(item);
+				
+					if(count==0){
+					self.checkout_total.push(total);
+					}
+					else{
+				 	self.checkout_total.push(total);
+					}
+				}
+				window.localStorage.setItem('cart', JSON.stringify(self.cart));
+				window.localStorage.setItem('checkout_total', JSON.stringify(self.checkout_total));
+				console.log('checkout_total:'+self.checkout_total[count]);
+				self.print_cart_list();	
+				count++;
+				location.reload();
+			}
+			
+		});
+
+	}
+
+	self.search_customer=function(){
+	$("[name= 'cust_name']").keyup(function(){
+		console.log("Keyup");
+		var post_data = {
+			utf8: $("[name='utf8']").val(), 
+			authenticity_token: $("[name='authenticity_token']").val(),
+			search_data: $("[name= 'cust_name']").val(), 			
+			}
+		$.ajax({
+			url: 'search_customer',
+			type: 'POST',
+			data: post_data ,
+			dataType: 'text',
+			success: function(data)
+			{
+				$('#customer_name_search_result').html(data);
+		   	}
+		})
+		.fail(function(data){
+			console.log(data);
+			});
+		});
+	};
+
+	self.checkout_submission=function(){
+		
+		$("#form-2").submit(function(e){
+			e.preventDefault();
+			console.log("checkout pressed");
+			
+		
+			var total_list=JSON.parse(window.localStorage.getItem("checkout_total"));
+			var cart = JSON.parse(window.localStorage.getItem("cart"));
+			var cart_data = [];
+			var i;
+			if (cart){
+			for(i = 0; i < cart.length;i++){
+	 				item = {
+					  			quantity: cart[i].quantity,
+					  			item_id:  cart[i].item_id ,
+					  			total: total_list[i].total,
+					  			name: cart[i].name, 
+					  		}
+					cart_data.push(item);
+				}
+			}
+			var total=0;
+			for(i=0;i<total_list.length;i++)
+			{
+				total+=total_list[i];
+			}
+
+			var customer={
+				name: $("#cust_name").val(),
+	  			address:  $("#cust_address").val(),
+	  			contact_no:	 $("#cust_mobileno").val(),
+			};
+
+		var post_data = {
+			utf8: $("[name='utf8']").val(), 
+			authenticity_token: $("[name='authenticity_token']").val(),
+			cart:JSON.stringify(cart_data),
+			total: total,
+			customer: customer 
+			}
+			$.ajax({
+						url: 'new',
+						type: 'POST',
+						data: post_data,
+						dataType: 'text',
+						success: function(data)
+						{
+							localStorage.clear();
+							location.reload();
+					   	}
+						
+					})
+					.fail(function(data){
+						console.log(data);
+						});
+		 });
+
+	}
+	
+	return self;	
+}
+
+var globals = new Globals();
+globals.search();
+globals.search_customer();
+globals.form_submission();
+globals.print_cart_list();
+globals.checkout_submission();
+globals.delete_cart_item();
+</script>

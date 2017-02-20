@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" style="border: 0px;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">INVENTORY</a>
+        </div>
+    </div><!-- /.container-fluid -->
+</nav>
+
+
+
+<div class="container-fluid">
+    <%= form_for(:expense_account,:url=>{:action => 'create'})  do |i|%>       
+        <div class="info text-center">
+            <h1 class="text-center" style="color: #000;margin-top: 90px;">Add Expense</h1>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-xs-12 col-md-4 text-left" style="border: 1px solid black;">
+                <div class="form-group">
+                    <br>
+                    <h4 style="text-align: left;">Expense Type :</h4>
+                    <input required autocomplete="off" type="text" class="form-control" id="expense_type" name="expense[type]" placeholder="Expense Type">
+                </div>
+
+                <div class="form-group">
+                    <h4 style="text-align: left;">Cost :</h4>
+                      <input required autocomplete="off" type="number" class="form-control" id="expense_cost" name="expense[cost]">          
+                </div>  
+
+                <div class="form-group">
+                    <h4 style="text-align: left;">Description :</h4>
+                    <input required autocomplete="off" type="text" class="form-control" id="expense_desc" placeholder="description" name="expense[description]">         
+                </div>
+
+                <div class="form-group">
+                    <h4 style="text-align: left;">Date :</h4>
+                    <input required autocomplete="off" type="date" class="form-control" id="ui-datepicker" placeholder="" name="expense[date]">         
+                </div>
+
+                <center>
+                    <button type="submit" name="commit" value="submit" class="btn btn-default">Submit
+                    </button>
+                </center>
+                <br>
+            </div>
+        </div>
+    <% end %>
+</div>
+
+</body>
+<script type="text/javascript">
+    
+$(document).ready(function () {
+     $("#ui-datepicker").datepicker();
+ });
+
+</script>
+</html>

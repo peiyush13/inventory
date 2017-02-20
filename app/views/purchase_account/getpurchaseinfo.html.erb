@@ -1,0 +1,26 @@
+ <div class="modal-body">
+    <div class="container-fluid">
+        <div class="form-group">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Purchasing Price</th>
+                <th>Quantity</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% if @single_purchase_info %>
+                <% @single_purchase_info.each  do  |purchase| %>
+                    <tr>
+                        <td><%= purchase[:item_name] %></td>
+                        <td><%= purchase[:price] %></td>
+                        <td><%= purchase[:stock] %></td>
+                    </tr>
+                <% end %>
+            <% end %>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>

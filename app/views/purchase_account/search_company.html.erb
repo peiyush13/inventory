@@ -1,0 +1,21 @@
+
+<% if @companies
+
+@companies.each  do  |company| %>
+
+<div id='company_name_search_result_<%=company.company_name%>' data-name="<%=company.company_name %>">
+<%= company.company_name %>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+	$('#company_name_search_result_<%=company.company_name %>').click(function(){
+		console.log('clicked');
+				globals.company_ajax_request(<%=company.company_name%>);
+			});			
+	});
+
+</script>
+ 
+<% end %>
+<% end %>

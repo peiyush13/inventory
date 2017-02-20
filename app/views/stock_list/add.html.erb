@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" style="border: 0px;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">INVENTORY</a>
+        </div>
+    </div>
+</nav>
+
+
+
+<div class="container-fluid">
+    <%= form_for(:stock_list,:url=>{:action => 'create'})  do |i|%>       
+        <div class="info text-center">
+            <h1 class="text-center" style="color: #000;margin-top: 90px;">Add Items</h1>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-xs-12 col-md-4 text-left" style="border: 1px solid black;">
+                <div class="form-group">
+                    <br>
+                    <h4 style="text-align: left;">Item name :</h4>
+                    <input required autocomplete="off" type="text" class="form-control" id="item_name" name="stock_list[item_name]" placeholder="Item Name">
+                </div>
+
+                <div class="form-group">
+                    <h4 style="text-align: left;">Purchasing Price :</h4>
+                      <input required autocomplete="off" type="number" class="form-control" id="item_cost" name="stock_list[price]">          
+                </div>  
+
+                <div class="form-group">
+                    <h4 style="text-align: left;">M.R.P. :</h4>
+                      <input required autocomplete="off" type="number" class="form-control" id="item_MRP" name="stock_list[MRP]">          
+                </div>  
+
+                <div class="form-group">
+                    <h4 style="text-align: left;">Quantity:</h4>
+                    <input required autocomplete="off" type="text" class="form-control" id="item_quantity" placeholder="stock to be added" name="stock_list[stock]">         
+                </div>
+
+                <div class="form-group">
+                    <h4 style="text-align: left;">Expiry Date :</h4>
+                    <input required autocomplete="off" type="date" class="form-control" id="ui-datepicker" placeholder="" name="stock_list[expiry]">         
+                </div>
+
+                <center>
+                    <button type="submit" name="commit" value="submit" class="btn btn-default">Submit
+                    </button>
+                </center>
+                <br>
+            </div>
+        </div>
+    <% end %>
+</div>
+
+</body>
+<script type="text/javascript">
+    
+$(document).ready(function () {
+     $("#ui-datepicker").datepicker();
+ });
+
+</script>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" style="border: 0px;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">INVENTORY</a>
+        </div>
+    </div>
+</nav>
+<%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) 
+                                %>
+
+<div class="container-fluid">
+    <!--form role="form"-->
+        <div class="info text-center">
+            <h1 class="text-center" style="color: #000;margin-top: 90px;">Stock List </h1>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+                  
+            <div class="col-xs-12 col-md-8 text-left">
+                <div align="center">
+                    <select class="form-control" name='sort_by' id='sort_by' style="width : 25%">        
+                        <option selected disabled>sort by</option>
+                        <option value="1">low to high total</option>
+                        <option value="2">high to low total</option>
+                        <option value="3">high to low quantity</option>
+                        <option value="4">low to high quantity </option>
+
+                    </select>
+                </div>    
+                <div class="form-group">
+                    <table class="table table-hover" id= "table_body">
+                        <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Item Name</th>
+                            <th>Price</th>
+                            <th>MRP</th>
+                            <th>Stock</th>
+                            <th>Expiry date</th>
+                            <th>Add</th>
+                            <th>Remove</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <% @items.each  do  |item| %>
+                        <tr>
+                            <td><%= item.item_id %></td>
+							<td><%= item.item_name %></td>
+							<td><%= item.price %></td>
+							<td><%= item.MRP %></td>
+                            <td><%= item.stock %></td>
+                            <td><%= item.expiry_date %></td>
+                            <td><%= link_to('add',:action =>'update',:item_id=>item.item_id) %>
+                            </td>
+							<td><%= link_to('remove',:action =>'delete',:item_id=> item.item_id) %>
+							</td>
+                        </tr>
+                        <% end %>
+                        </tbody>
+                    </table>
+                </div>
+     <%= paginate @items %>
+                <br>
+                <br>
+            </div>
+        </div>
+    <!--/form-->
+</div>
+
+<script type="text/javascript">
+
+ function Globals(){
+        var self = this; 
+       
+        self.sort_by = function(){
+                 $(document).on('click',"#sort_by",function() {
+                        ajax_sorting_request(); 
+                    });
+                    function ajax_sorting_request()
+                    {
+                        console.log("in ajax sorting request");
+
+                        var post_data = {
+                        utf8: $("[name='utf8']").val(), 
+                        authenticity_token: $("[name='authenticity_token']").val(),
+                        sort_type : $("#sort_by").val(),
+                        };
+                        $.ajax({
+                            url: 'sort',
+                            type: 'POST',
+                            data: post_data ,
+                            dataType: 'text',
+                            success: function(data)
+                                {
+                                    $("#table_body").html(data);
+                                    // console.log(data);
+                                }
+                            }).fail(function(data){
+                                console.log("fail"); 
+                                console.log(data);
+                            });
+                        console.log($("#sort_by").val());
+                    }
+
+                }
+    
+    }
+
+    var globals = new Globals();
+    // globals.filter_by_date();
+     globals.sort_by();
+
+
+</script>
+
+
+</body>
+</html>

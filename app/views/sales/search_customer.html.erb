@@ -1,0 +1,21 @@
+
+<% if @customers
+
+@customers.each  do  |customer| %>
+
+<div id='cust_search_result_<%=customer.c_id%>' data-id="<%=customer.c_id%>" data-name="<%=customer.customer_name %>" data-mobileno="<%=customer.contact_no%>", data-address="<%=customer.address%>">
+<%= customer.customer_name %>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+	$('#cust_search_result_<%=customer.c_id%>').click(function(){
+				console.log('clicked'+$("#cust_search_result_<%=customer.c_id%>").text());
+				globals.cust_ajax_request(<%=customer.c_id%>);
+			});			
+	});
+
+</script>
+ 
+<% end %>
+<% end %>

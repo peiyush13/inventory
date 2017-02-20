@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" style="border: 0px;">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">INVENTORY</a>
+        </div>
+    </div>
+</nav>
+
+            <%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) 
+                                %> 
+<div class="container-fluid">
+        <div class="info text-center">
+            <h1 class="text-center" style="color: #000;margin-top: 90px;">Sales List </h1>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="form-group">
+                        <form id="form-1" method='post'  action=''>
+                            <br><br> 
+                            <input  required autocomplete="off" class="form-control" name='from_date' id='from_date' placeholder="from Date"  type="date"/>
+                            <h4 style="text-align: left;"> To </h4>
+                            <input  required autocomplete="off" class="form-control" name='to_date' id='to_date' placeholder="To Date" type="date" />
+                            <div align="center" style="margin-top:20px; ">
+                            <button type="Submit" id="date_submit" class="btn btn-default text-center">Submit</button>
+                            </div>
+                        </form>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-8 text-left">
+                <div align="center">
+                    <select class="form-control" name='sort_by' id='sort_by' style="width : 25%">        
+                        <option selected disabled>sort by</option>
+                        <option value="1">low to high amount</option>
+                        <option value="2">high to low amount</option>
+                        <option value="3">newest first</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <table class="table table-hover" id="table_body">
+                        <thead>
+                        <tr>
+                            <th>Sales ID</th>
+                            <th>Customer Name</th>
+                            <th>Total</th>
+                            <th>Sales Date</th>                            
+                            <th>details</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% @sales_info.each  do  |sale| %>
+                        <tr>
+                            <td><%= sale[:sale_no] %></td>
+							<td><%= sale[:customer_name] %></td>
+							<td><%= sale[:total] %></td>
+							<td><%= sale[:created_at] %></td>
+                            <td>
+                            <a id="sale_detail_<%= sale[:sale_no] %>" class="details" data-toggle="modal"  data-target="#myModal" data-id="<%= sale[:sale_no] %>"> 
+                            details
+                            </a>
+                            </td>
+                        </tr>
+                        <% end %>
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <br>
+            </div>
+        </div>
+     <%= paginate @sales_info %>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <center>
+                <h4 class="modal-title" id="myModalLabel">Sales Info</h4>
+                </center>
+            </div>
+            <div id="sales_details_result">
+
+            </div>
+           
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    
+    function Globals(){
+        var self = this; 
+         self.get_sales_info=function(){
+            var id;
+
+            $(".details").click(function(event){
+                    console.log('works');
+            });
+            
+            <% @sales_info.each  do  |sale| %>
+            $("#sale_detail_<%= sale[:sale_no] %>").click(function(){
+                console.log("sales details pressed");
+                id=$("#sale_detail_<%= sale[:sale_no] %>").attr('data-id');
+                   console.log(id);
+                   ajax_request(id);
+            });
+            <% end %>
+
+            function ajax_request(id){
+            var post_data={
+                utf8: $("[name='utf8']").val(), 
+                authenticity_token: $("[name='authenticity_token']").val(),
+                sale_id: id,}
+
+                $.ajax({
+                url: 'getsalesinfo',
+                type: 'POST',
+                data: post_data ,
+                dataType: 'text',
+                success: function(data)
+                    {
+                        $('#sales_details_result').html(data);
+                    }
+                })
+                .fail(function(data){
+                    console.log(data);
+                    });     
+            }
+        }
+        self.filter_by_date=function(){
+            $("#from_date").change(function(){
+                var a=$("#from_date").val();
+                $("#to_date").attr("min",a);
+            });
+
+            $("#to_date").change(function(){
+                var a=$("#to_date").val();
+                $("#from_date").attr("max",a);
+            });
+
+            $("#form-1").submit(function(e){
+                console.log("form submitted");
+                e.preventDefault();
+                date_filter_ajax_request();
+            });
+
+            function date_filter_ajax_request(){
+
+                var a=$("#to_date").val();
+
+                var b=$("#from_date").val();
+
+                var post_data = {
+                    utf8: $("[name='utf8']").val(), 
+                    authenticity_token: $("[name='authenticity_token']").val(),
+                    to_date : a,
+                    from_date: b,
+                    filter_type: "date",
+                    sort_type : $("#sort_by").val(),      
+                    };
+                    $.ajax({
+                        url: 'sort',
+                        type: 'POST',
+                        data: post_data ,
+                        dataType: 'text',
+                        success: function(data)
+                            {
+                                console.log("success");
+                                $("#table_body").html(data);
+                            }
+                        }).fail(function(data){
+                        console.log(data);
+                        });
+            }
+        }
+
+         self.sort_by = function(){
+                 $("#sort_by").click(function() {
+                        ajax_sorting_request(); 
+                    });
+                    function ajax_sorting_request()
+                    {
+                        console.log("in ajax sorting request");
+
+                        var post_data = {
+                        utf8: $("[name='utf8']").val(), 
+                        authenticity_token: $("[name='authenticity_token']").val(),
+                        sort_type : $("#sort_by").val(),
+                        to_date: $("#to_date").val(),
+                        from_date: $("#from_date").val(),      
+                        };
+                        $.ajax({
+                            url: 'sort',
+                            type: 'POST',
+                            data: post_data ,
+                            dataType: 'text',
+                            success: function(data)
+                                {
+                                    $("#table_body").html(data);
+                                }
+                            }).fail(function(data){
+                            console.log(data);
+                            });
+                    }
+                }
+        return self; 
+    }
+
+    var globals = new Globals();
+    globals.get_sales_info();
+    globals.sort_by();
+    globals.filter_by_date();
+</script>
+
+
+
+</body>
+</html>
